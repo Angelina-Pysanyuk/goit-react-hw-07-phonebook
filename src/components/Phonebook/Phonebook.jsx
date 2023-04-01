@@ -10,27 +10,32 @@ import {
   Label,
   StyledBtn,
 } from './Phonebook.styled';
-import { addContact } from 'redux/contactSlice';
+import { addContacts, fetchContacts } from 'redux/contactSlice';
 import { useDispatch } from 'react-redux';
 import { getContacts } from 'redux/selectors';
 import { useSelector } from 'react-redux';
+import { useEffect } from 'react';
 
-const Phonebook = ({ onRemoveContact, onAddContact }) => {
+const Phonebook = () => {
   const [name, setName] = useState('');
-  const [number, setNumber] = useState('');
+  const [phone, setPhone] = useState('');
   const dispatch = useDispatch();
   const contacts = useSelector(getContacts);
+
+  useEffect(() => {
+    dispatch(fetchContacts());
+  }, [dispatch]);
 
   const handleInput = e => {
     switch (e.target.name) {
       case 'name':
         setName(e.target.value);
         break;
-      case 'number':
-        setNumber(e.target.value);
+      case 'phone':
+        setPhone(e.target.value);
         break;
       default:
-        console.log('error');
+        console.log('not correct option');
         break;
     }
   };
@@ -40,7 +45,7 @@ const Phonebook = ({ onRemoveContact, onAddContact }) => {
 
     const contact = {
       name,
-      number,
+      phone,
       id: nanoid(),
     };
 
@@ -53,9 +58,9 @@ const Phonebook = ({ onRemoveContact, onAddContact }) => {
       return;
     }
 
-    dispatch(addContact(contact));
+    dispatch(addContacts(contact));
     setName('');
-    setNumber('');
+    setPhone('');
   };
 
   return (
@@ -77,10 +82,10 @@ const Phonebook = ({ onRemoveContact, onAddContact }) => {
           <span>Number</span>
           <StyledInput
             type="tel"
-            name="number"
+            name="phone"
             pattern="\+?\d{1,4}?[-.\s]?\(?\d{1,3}?\)?[-.\s]?\d{1,4}[-.\s]?\d{1,4}[-.\s]?\d{1,9}"
             title="Phone number must be digits and can contain spaces, dashes, parentheses and can start with +"
-            value={number}
+            value={phone}
             onChange={handleInput}
             required
           />

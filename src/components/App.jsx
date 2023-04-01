@@ -1,8 +1,12 @@
+import { useSelector } from 'react-redux';
+import { getLoadingStatus } from 'redux/selectors';
 import ContactList from './ContactList/ContactList';
 import Phonebook from './Phonebook/Phonebook';
 import Filter from './Filter/Filter';
+import Loader from './Loader/Loader';
 
 const App = () => {
+  const isLoading = useSelector(getLoadingStatus);
   return (
     <div
       style={{
@@ -11,15 +15,15 @@ const App = () => {
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'flex-start',
-        marginTop: '50px',
-        fontSize: 22,
-        color: 'rgb(139, 126, 116)',
+        fontSize: 30,
+        color: '#010101',
       }}
     >
       <h2>Phonebook</h2>
       <Phonebook />
-      <h2>Contacts</h2>
       <Filter />
+      <h2>Contacts</h2>
+      {isLoading && <Loader />}
       <ContactList />
     </div>
   );
